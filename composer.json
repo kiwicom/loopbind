@@ -1,0 +1,66 @@
+{
+  "name": "kiwicom/loopbind",
+  "description": "\uD83D\uDEE0️️ CLI tool to easily bind localhost network interface with additional IP and ensure matching record in /etc/hosts.",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/kiwicom/loopbind",
+  "authors": [
+    {
+      "name": "Jan Drábek",
+      "email": "jan@drabek.cz"
+    },
+    {
+      "name": "Transactional Messaging Team",
+      "email": "engineering.mmb-booking-core.tram@kiwi.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Kiwicom\\Loopbind\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kiwicom\\Loopbind\\Tests\\": "tests/"
+    }
+  },
+  "bin": [
+    "bin/loopbind"
+  ],
+  "scripts": {
+    "stan": "./vendor/bin/phpstan analyse src tests",
+    "unit": "./vendor/bin/phpunit tests",
+    "sniff": "./vendor/bin/ecs check src tests",
+    "sniff-fix": "./vendor/bin/ecs check src tests --fix",
+    "all": [
+        "composer sniff",
+        "composer stan",
+        "composer unit"
+    ]
+  },
+  "require": {
+    "php": ">=8.0",
+    "ext-json": "*",
+    "ext-iconv": "*",
+    "ext-mbstring": "*",
+    "contributte/console": "^0.5.0",
+    "nette/utils": "^3.2",
+    "nette/schema": "^1.2"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.9",
+    "spaze/phpstan-disallowed-calls": "^2.11",
+    "spaze/phpstan-disallowed-calls-nette": "^2.0",
+    "phpstan/phpstan-phpunit": "^1.3",
+    "phpstan/extension-installer": "^1.2",
+    "phpstan/phpstan-strict-rules": "^1.4",
+    "pepakriz/phpstan-exception-rules": "^0.12.0",
+    "phpunit/phpunit": "^9.5",
+    "symplify/easy-coding-standard": "^11.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
+  }
+}

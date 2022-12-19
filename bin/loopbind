@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use Contributte\Console\Application;
+use Kiwicom\Loopbind\Commands\ApplyCommand;
+use Kiwicom\Loopbind\Commands\UnapplyCommand;
+use Kiwicom\Loopbind\Constants\ExitCodes;
+use Kiwicom\Loopbind\Helpers\PlatformHelpers;
+
+$autoloaders = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+foreach ($autoloaders as $autoloader) {
+    if (is_file($autoloader)) {
+        require_once $autoloader;
+        break;
+    }
+}
+
+if (!PlatformHelpers::isOSX() && !PlatformHelpers::isLinux()) {
+    echo "This tool is currently only supporting OS X and Linux.\n";
+    exit(ExitCodes::UNSUPPORTED_PLATFORM);
+}
+
+$app = new Application();
+$app->setCatchExceptions(true);
+$app->setName('Loopbind');
+$app->addCommands([
+    new ApplyCommand(null),
+    new UnapplyCommand(null)
+]);
+exit($app->run());
