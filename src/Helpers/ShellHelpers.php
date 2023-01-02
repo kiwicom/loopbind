@@ -57,24 +57,26 @@ final class ShellHelpers
      * Returns shell command to remove previous entry of hostname according to config from /etc/hosts file
      *
      * @param Config $config
+     * @param string $hostname
      *
      * @return string
      */
-    public static function getCommandUnbindHostname(Config $config): string
+    public static function getCommandUnbindHostname(Config $config, string $hostname): string
     {
-        return "sed -i.bak '/[[:space:]]" . self::escapeHostnameSedPattern($config->getHostname()) . "$/d' /etc/hosts";
+        return "sed -i.bak '/[[:space:]]" . self::escapeHostnameSedPattern($hostname) . "$/d' /etc/hosts";
     }
 
     /**
      * Returns shell command to add entry of hostname according to config to /etc/hosts file
      *
      * @param Config $config
+     * @param string $hostname
      *
      * @return string
      */
-    public static function getCommandBindHostname(Config $config): string
+    public static function getCommandBindHostname(Config $config, string $hostname): string
     {
-        return 'echo \'' . $config->getLocalAliasIP() . "\t" . $config->getHostname() . '\' >> /etc/hosts';
+        return 'echo \'' . $config->getLocalAliasIP() . "\t" . $hostname . '\' >> /etc/hosts';
     }
 
     /**

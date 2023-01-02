@@ -11,7 +11,14 @@ class ConfigTest extends TestCase
     {
         $config = new Config('127.0.0.2', 'foo-bar.test');
         self::assertSame('127.0.0.2', $config->getLocalAliasIP());
-        self::assertSame('foo-bar.test', $config->getHostname());
+        self::assertSame(['foo-bar.test'], $config->getHostname());
+    }
+
+    public function testValidArray(): void
+    {
+        $config = new Config('127.0.0.2', ['www.foo-bar.test', 'foo-bar.test']);
+        self::assertSame('127.0.0.2', $config->getLocalAliasIP());
+        self::assertSame(['www.foo-bar.test', 'foo-bar.test'], $config->getHostname());
     }
 
     public function testInvalidIP(): void

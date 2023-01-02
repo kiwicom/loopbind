@@ -18,5 +18,9 @@ final class ExitCodes
 
     public const UNAPPLY_FAILED = 4;
 
+    public const CONFIG_ALREADY_EXISTS = 5;
+
+    public const NEW_CONFIG_INVALID = 6;
+
     public const UNSUPPORTED_PLATFORM = 100;
 }

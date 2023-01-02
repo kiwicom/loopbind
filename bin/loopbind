@@ -3,7 +3,8 @@
 
 use Contributte\Console\Application;
 use Kiwicom\Loopbind\Commands\ApplyCommand;
-use Kiwicom\Loopbind\Commands\UnapplyCommand;
+use Kiwicom\Loopbind\Commands\InitCommand;
+use Kiwicom\Loopbind\Commands\ShowCommand;use Kiwicom\Loopbind\Commands\UnapplyCommand;
 use Kiwicom\Loopbind\Constants\ExitCodes;
 use Kiwicom\Loopbind\Helpers\PlatformHelpers;
 
@@ -27,7 +28,9 @@ $app = new Application();
 $app->setCatchExceptions(true);
 $app->setName('Loopbind');
 $app->addCommands([
+    new InitCommand(null),
     new ApplyCommand(null),
-    new UnapplyCommand(null)
+    new UnapplyCommand(null),
+    new ShowCommand(null),
 ]);
 exit($app->run());

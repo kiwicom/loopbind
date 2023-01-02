@@ -29,7 +29,19 @@ Run
 composer global require kiwicom/loopbind
 ```
 
-Then if you have composer bin directory on the `PATH` you can use it by calling `loopbind` in the CLI.
+Then if you have composer bin directory on the `PATH` you can use it by calling `loopbind` in the CLI. So you can initialize the configuration with a CLI wizard:
+
+```bash
+$ loopbind init
+> IPv4 address from local block:
+> 127.0.0.1
+> Hostname (leave empty to continue):
+> hostname
+> Hostname (leave empty to continue):
+> 
+> New config file `.loopbind.json` was created.
+
+```
 
 ## Usage
 
@@ -41,8 +53,16 @@ In the project root define a file named `.loopbind.json` with following content:
 }
 ```
 
+Or when you need to bind multiple hostnames:
+```json
+{
+    "localIPAlias": "127.11.23.1",
+    "hostname": ["www.foobar.test","foobar.test"]
+}
+```
+
 Then in this directory you can run `loopbind apply` to run commands to ensure the binding.
-Also, you can run `loopbind unapply` to remove it.
+Also, you can run `loopbind unapply` to remove it and `loopbind show` to show the configuration and its status.
 
 The commands are idempotent so repeated apply/unapply does nothing (and the apply command does not even need to run the command again).
 

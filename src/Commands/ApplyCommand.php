@@ -7,12 +7,15 @@ use Kiwicom\Loopbind\Config\ConfigLoader;
 use Kiwicom\Loopbind\Constants\ExitCodes;
 use Kiwicom\Loopbind\Helpers\BindingHelpers;
 use Kiwicom\Loopbind\Helpers\ShellHelpers;
+use Kiwicom\Loopbind\Trait\ConfigurationPrinter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class ApplyCommand extends Command
 {
+    use ConfigurationPrinter;
+
     protected function configure(): void
     {
         $this->setName('apply')
@@ -30,15 +33,17 @@ final class ApplyCommand extends Command
             return ExitCodes::NOT_READABLE_CONFIG_FILE;
         }
 
-        $this->printDesiredConfiguration($config, $output);
+        self::printDesiredConfiguration($config, $output);
 
         $shellCommands = [];
         if (!(BindingHelpers::isLocalInterfaceAliased($config))) {
             $shellCommands[] = ShellHelpers::getCommandLocalhostAlias($config);
         }
-        if (!(BindingHelpers::isHostnameBinded($config))) {
-            $shellCommands[] = ShellHelpers::getCommandUnbindHostname($config);
-            $shellCommands[] = ShellHelpers::getCommandBindHostname($config);
+        foreach ($config->getHostname() as $hostname) {
+            if (!(BindingHelpers::isHostnameBinded($config, $hostname))) {
+                $shellCommands[] = ShellHelpers::getCommandUnbindHostname($config, $hostname);
+                $shellCommands[] = ShellHelpers::getCommandBindHostname($config, $hostname);
+            }
         }
 
         if (count($shellCommands) === 0) {
@@ -64,6 +69,8 @@ final class ApplyCommand extends Command
         $output->writeln('----------------');
         $output->writeln('Desired configuration:');
         $output->writeln("{$config->getLocalAliasIP()} -> 127.0.0.1\t\t" . (BindingHelpers::isLocalInterfaceAliased($config) ? '[<fg=green>READY</>]' : '[<fg=red>MISSING</>]'));
-        $output->writeln("{$config->getHostname()} -> {$config->getLocalAliasIP()}\t\t" . (BindingHelpers::isHostnameBinded($config) ? '[<fg=green>READY</>]' : '[<fg=red>MISSING</>]'));
+        foreach ($config->getHostname() as $hostname) {
+            $output->writeln("{$hostname} -> {$config->getLocalAliasIP()}\t\t" . (BindingHelpers::isHostnameBinded($config, $hostname) ? '[<fg=green>READY</>]' : '[<fg=red>MISSING</>]'));
+        }
     }
 }

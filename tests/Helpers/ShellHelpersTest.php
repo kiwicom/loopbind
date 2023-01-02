@@ -11,7 +11,7 @@ class ShellHelpersTest extends TestCase
 {
     public function testGetCommandUnbindHostname(): void
     {
-        self::assertSame("sed -i.bak '/[[:space:]]mailing\.test$/d' /etc/hosts", ShellHelpers::getCommandUnbindHostname($this->getConfig()));
+        self::assertSame("sed -i.bak '/[[:space:]]mailing\.test$/d' /etc/hosts", ShellHelpers::getCommandUnbindHostname($this->getConfig(), 'mailing.test'));
     }
 
     public function testGetCommandLocalhostAlias(): void
@@ -35,7 +35,7 @@ class ShellHelpersTest extends TestCase
 
     public function testGetCommandBindHostname(): void
     {
-        self::assertSame("echo '127.0.0.23\tmailing.test' >> /etc/hosts", ShellHelpers::getCommandBindHostname($this->getConfig()));
+        self::assertSame("echo '127.0.0.23\tmailing.test' >> /etc/hosts", ShellHelpers::getCommandBindHostname($this->getConfig(), 'mailing.test'));
     }
 
     public function testGetCommandLocalhostUnalias(): void
