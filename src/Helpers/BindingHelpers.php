@@ -13,12 +13,13 @@ final class BindingHelpers
      * Returns true iff hostname resolves to desired IP according to config
      *
      * @param Config $config
+     * @param string $hostname
      *
      * @return bool
      */
-    public static function isHostnameBinded(Config $config): bool
+    public static function isHostnameBinded(Config $config, string $hostname): bool
     {
-        return gethostbyname($config->getHostname()) === $config->getLocalAliasIP();
+        return gethostbyname($hostname) === $config->getLocalAliasIP();
     }
 
     /**

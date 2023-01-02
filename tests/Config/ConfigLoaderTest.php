@@ -47,6 +47,16 @@ class ConfigLoaderTest extends TestCase
         $configLoader = new ConfigLoader();
         $config = $configLoader->loadAndParse(__DIR__ . '/fixtures/valid.json');
         self::assertSame('127.11.23.1', $config->getLocalAliasIP());
-        self::assertSame('foobar.test', $config->getHostname());
+        self::assertSame(['foobar.test'], $config->getHostname());
+    }
+
+    public function testValidArray(): void
+    {
+        $configLoader = new ConfigLoader();
+        $config = $configLoader->loadAndParse(__DIR__ . '/fixtures/valid.array.json');
+        self::assertSame('127.11.23.1', $config->getLocalAliasIP());
+        self::assertCount(2, $config->getHostname());
+        self::assertSame('www.foobar.test', $config->getHostname()[0]);
+        self::assertSame('foobar.test', $config->getHostname()[1]);
     }
 }

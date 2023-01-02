@@ -37,9 +37,12 @@ final class UnapplyCommand extends Command
         if (PlatformHelpers::isOSX() && (BindingHelpers::isLocalInterfaceAliased($config))) {
             $shellCommands[] = ShellHelpers::getCommandLocalhostUnalias($config);
         }
-        if ((BindingHelpers::isHostnameBinded($config))) {
-            $shellCommands[] = ShellHelpers::getCommandUnbindHostname($config);
+        foreach ($config->getHostname() as $hostname) {
+            if ((BindingHelpers::isHostnameBinded($config, $hostname))) {
+                $shellCommands[] = ShellHelpers::getCommandUnbindHostname($config, $hostname);
+            }
         }
+
 
         if (count($shellCommands) === 0) {
             $output->writeln('<options=bold>No changes needed, nothing is applied.</>');
@@ -69,6 +72,8 @@ final class UnapplyCommand extends Command
         if (PlatformHelpers::isLinux()) {
             $output->writeln("{$config->getLocalAliasIP()} -> 127.0.0.1\t\t" . '[<fg=blue>IRRELEVANT</>]');
         }
-        $output->writeln("{$config->getHostname()} -> {$config->getLocalAliasIP()}\t\t" . (BindingHelpers::isHostnameBinded($config) ? '[<fg=red>TO BE REMOVED</>]' : '[<fg=green>NOT PRESENT</>]'));
+        foreach ($config->getHostname() as $hostname) {
+            $output->writeln("{$hostname} -> {$config->getLocalAliasIP()}\t\t" . (BindingHelpers::isHostnameBinded($config, $hostname) ? '[<fg=red>TO BE REMOVED</>]' : '[<fg=green>NOT PRESENT</>]'));
+        }
     }
 }

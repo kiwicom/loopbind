@@ -36,13 +36,23 @@ final class ConfigLoader
     public function load(string $filePath): string
     {
         if (!file_exists($filePath) || !is_readable($filePath)) {
-            throw new \Kiwicom\Loopbind\Exceptions\UnreadableConfigFileException("File `${filePath}` is not readable or does not exist.");
+            throw new \Kiwicom\Loopbind\Exceptions\UnreadableConfigFileException("File `{$filePath}` is not readable or does not exist.");
         }
         $content = file_get_contents($filePath);
         if ($content === false) {
-            throw new \Kiwicom\Loopbind\Exceptions\UnreadableConfigFileException("File `${filePath}` is not readable or does not exist.");
+            throw new \Kiwicom\Loopbind\Exceptions\UnreadableConfigFileException("File `{$filePath}` is not readable or does not exist.");
         }
         return $content;
+    }
+
+    /**
+     * @param string $filePath
+     *
+     * @return bool
+     */
+    public function exists(string $filePath): bool
+    {
+        return file_exists($filePath);
     }
 
     /**
@@ -58,26 +68,26 @@ final class ConfigLoader
         try {
             $data = Json::decode($content, Json::FORCE_ARRAY);
         } catch (\Nette\Utils\JsonException $exception) {
-            throw new \Kiwicom\Loopbind\Exceptions\InvalidConfigFileException("File `${filePath}` is not a valid JSON file: {$exception->getMessage()}");
+            throw new \Kiwicom\Loopbind\Exceptions\InvalidConfigFileException("File `{$filePath}` is not a valid JSON file: {$exception->getMessage()}");
         }
 
         $schema = Expect::structure([
             'localIPAlias' => Expect::string()->required(),
-            'hostname' => Expect::string()->required(),
+            'hostname' => Expect::anyOf(Expect::string(), Expect::arrayOf(Expect::string()))->required(),
         ])->castTo('array');
 
         $processor = new Processor();
         try {
-            /** @var array{localIPAlias: string, hostname: string} $normalized */
+            /** @var array{localIPAlias: string, hostname: string|array<string>} $normalized */
             $normalized = $processor->process($schema, $data);
         } catch (\Nette\Schema\ValidationException $exception) {
-            throw new \Kiwicom\Loopbind\Exceptions\InvalidConfigFileException("File `${filePath}` does not contain valid configuration: {$exception->getMessage()}");
+            throw new \Kiwicom\Loopbind\Exceptions\InvalidConfigFileException("File `{$filePath}` does not contain valid configuration: {$exception->getMessage()}");
         }
 
         try {
             $config = new Config($normalized['localIPAlias'], $normalized['hostname']);
         } catch (\Kiwicom\Loopbind\Exceptions\InvalidIPAddressException|\Kiwicom\Loopbind\Exceptions\InvalidHostnameException $exception) {
-            throw new \Kiwicom\Loopbind\Exceptions\InvalidConfigFileException("File `${filePath}` does not contain valid configuration: {$exception->getMessage()}");
+            throw new \Kiwicom\Loopbind\Exceptions\InvalidConfigFileException("File `{$filePath}` does not contain valid configuration: {$exception->getMessage()}");
         }
         return $config;
     }
