@@ -55,7 +55,7 @@
     "phpstan/extension-installer": "^1.2",
     "phpstan/phpstan-strict-rules": "^1.4",
     "pepakriz/phpstan-exception-rules": "^0.12.0",
-    "phpunit/phpunit": "^9.5",
+    "phpunit/phpunit": "^10.0",
     "symplify/easy-coding-standard": "^11.1"
   },
   "config": {
