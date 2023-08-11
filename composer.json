@@ -56,7 +56,7 @@
     "phpstan/phpstan-strict-rules": "^1.4",
     "pepakriz/phpstan-exception-rules": "^0.12.0",
     "phpunit/phpunit": "^10.0",
-    "symplify/easy-coding-standard": "^11.1"
+    "symplify/easy-coding-standard": "^12.0"
   },
   "config": {
     "allow-plugins": {
