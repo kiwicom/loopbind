@@ -92,6 +92,22 @@ final class ShellHelpers
     }
 
     /**
+     * Returns whether the given string is valid bash variable name
+     * @param string $variableName
+     * @return bool
+     */
+    public static function isValidBashVariable(string $variableName): bool
+    {
+        return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $variableName) === 1;
+    }
+
+    public static function getCommandToGetBashVariableValue(string $variableName): string
+    {
+        // extract value from current ENV variable with .env applied with using bash command
+        return 'sh -c \'source .env; echo "${' . $variableName . '}"\'';
+    }
+
+    /**
      * Return escaped hostname to be used as sed pattern
      *
      * @param string $pattern

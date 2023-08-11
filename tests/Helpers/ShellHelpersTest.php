@@ -47,6 +47,29 @@ class ShellHelpersTest extends TestCase
         self::assertSame('ifconfig lo0 -alias \'127.0.0.23\'', ShellHelpers::getCommandLocalhostUnalias($this->getConfig()));
     }
 
+    public function testIsValidBashVariable(): void
+    {
+        self::assertTrue(ShellHelpers::isValidBashVariable('a'));
+        self::assertTrue(ShellHelpers::isValidBashVariable('A'));
+        self::assertTrue(ShellHelpers::isValidBashVariable('ABC123'));
+        self::assertTrue(ShellHelpers::isValidBashVariable('ABC_123'));
+        self::assertTrue(ShellHelpers::isValidBashVariable('_A'));
+        self::assertTrue(ShellHelpers::isValidBashVariable('B_'));
+        self::assertFalse(ShellHelpers::isValidBashVariable('1'));
+        self::assertFalse(ShellHelpers::isValidBashVariable('1A'));
+        self::assertFalse(ShellHelpers::isValidBashVariable(' '));
+        self::assertFalse(ShellHelpers::isValidBashVariable('č'));
+    }
+
+    public function testGetCommandToGetBashVariableValue(): void
+    {
+        self::assertSame('sh -c \'source .env; echo "${A}"\'', ShellHelpers::getCommandToGetBashVariableValue('A'));
+        self::assertSame('sh -c \'source .env; echo "${ABC123}"\'', ShellHelpers::getCommandToGetBashVariableValue('ABC123'));
+        self::assertSame('sh -c \'source .env; echo "${ABC_123}"\'', ShellHelpers::getCommandToGetBashVariableValue('ABC_123'));
+        self::assertSame('sh -c \'source .env; echo "${_A}"\'', ShellHelpers::getCommandToGetBashVariableValue('_A'));
+        self::assertSame('sh -c \'source .env; echo "${B_}"\'', ShellHelpers::getCommandToGetBashVariableValue('B_'));
+    }
+
     private function getConfig(): Config
     {
         return new Config('127.0.0.23', 'mailing.test');
