@@ -33,6 +33,13 @@ Then if you have composer bin directory on the `PATH` you can use it by calling 
 
 ```bash
 $ loopbind init
+> ENV variable name to extract IP address from (leave empty if you want to provide manually or want random one):
+> 
+> Do you want to generate random free local IP:
+>
+>  [0] yes
+>  [1] no
+> > no
 > IPv4 address from local block:
 > 127.0.0.1
 > Hostname (leave empty to continue):
@@ -40,7 +47,13 @@ $ loopbind init
 > Hostname (leave empty to continue):
 > 
 > New config file `.loopbind.json` was created.
-
+> Do you want to create .env file with variable IP:
+>
+>  [0] yes
+>  [1] no
+> > yes
+> File `.env` was created with variable `IP` set to `127.0.0.2`.
+> You appear to have .docker-compose.yml file in your directory. Run `docker compose stop`, replace port binding from `"80:80"` to `"$IP:80:80"` and then `docker copmose up`.
 ```
 
 ## Usage

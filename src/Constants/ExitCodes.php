@@ -22,5 +22,7 @@ final class ExitCodes
 
     public const NEW_CONFIG_INVALID = 6;
 
+    public const UNREADABLE_DOT_ENV = 7;
+
     public const UNSUPPORTED_PLATFORM = 100;
 }
