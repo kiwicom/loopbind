@@ -43,7 +43,7 @@
     "ext-json": "*",
     "ext-iconv": "*",
     "ext-mbstring": "*",
-    "contributte/console": "^0.9.0",
+    "contributte/console": "^0.10.0",
     "nette/utils": "^4.0",
     "nette/schema": "^1.2"
   },
