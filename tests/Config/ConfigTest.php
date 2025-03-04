@@ -44,4 +44,10 @@ class ConfigTest extends TestCase
         $this->expectException(\Kiwicom\Loopbind\Exceptions\InvalidHostnameException::class);
         new Config('127.0.0.12', 'č.test');
     }
+
+    public function testInvalidHostname3(): void
+    {
+        $this->expectException(\Kiwicom\Loopbind\Exceptions\InvalidHostnameException::class);
+        new Config('127.0.0.12', ['localhost']);
+    }
 }

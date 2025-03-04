@@ -36,6 +36,9 @@ final class Config implements JsonSerializable
         if (is_array($hostname)) {
             array_map(fn (string $host): bool => filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false ?
                 throw new \Kiwicom\Loopbind\Exceptions\InvalidHostnameException("Value `{$host}` is not valid hostname.") : true, $hostname);
+
+            array_map(fn (string $hostname): bool => $hostname === 'localhost' ?
+                    throw new \Kiwicom\Loopbind\Exceptions\InvalidHostnameException("Hostname `{$hostname}` is forbidden by this tool.") : true, $hostname);
         }
         if ($hostname === 'localhost') {
             throw new \Kiwicom\Loopbind\Exceptions\InvalidHostnameException("Hostname `{$hostname}` is forbidden by this tool.");
