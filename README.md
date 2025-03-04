@@ -2,6 +2,11 @@
 
 🛠️️ CLI tool to easily bind localhost network interface with additional IP and ensure matching record in /etc/hosts.
 
+> [!WARNING]  
+> **This tool should only be used in local environments and should not be used in production.**
+> 
+> **It is crucial to use this tool only on projects (configs) under your control as it can seriously compromise your /etc/hosts file.**
+
 This is a helper tool to be installed via `composer global` to machines where the localhost deployment process of
 Docker composition (via `docker-compose.yaml`) is prepared in a way that it binds the ports on IP from localhost subnet block and multiple of such
 compositions should be allowed to run in parallel (differentiated by the IP).
