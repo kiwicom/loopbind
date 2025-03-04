@@ -34,4 +34,31 @@ final class IPHelpers
         }
         throw new UnableToFindUnreferencedIPAddressException();
     }
+
+    /**
+     * Returns true iff the given URL is a forbidden domain
+     * @param string $url
+     * @return bool
+     */
+    public static function isForbiddenDomain(string $url): bool
+    {
+        $url = mb_strtolower($url);
+        $forbidden = [
+            'localhost',
+            'localhost4',
+            'localhost6',
+            'localhost.localdomain',
+            'localhost4.localdomain4',
+            'localhost6.localdomain6',
+            'ip6-localhost',
+            'ip6-loopback',
+            'ip6-localnet',
+            'ip6-mcastprefix',
+            'ip6-allnodes',
+            'ip6-allrouters',
+            'ip6-allhosts',
+            'broadcasthost'
+        ];
+        return in_array($url, $forbidden, true);
+    }
 }

@@ -3,6 +3,7 @@
 namespace Kiwicom\Loopbind\Config;
 
 use JsonSerializable;
+use Kiwicom\Loopbind\Helpers\IPHelpers;
 use function array_map;
 use function filter_var;
 use function is_array;
@@ -36,8 +37,11 @@ final class Config implements JsonSerializable
         if (is_array($hostname)) {
             array_map(fn (string $host): bool => filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false ?
                 throw new \Kiwicom\Loopbind\Exceptions\InvalidHostnameException("Value `{$host}` is not valid hostname.") : true, $hostname);
+
+            array_map(fn (string $hostname): bool => IPHelpers::isForbiddenDomain($hostname) ?
+                    throw new \Kiwicom\Loopbind\Exceptions\InvalidHostnameException("Hostname `{$hostname}` is forbidden by this tool.") : true, $hostname);
         }
-        if ($hostname === 'localhost') {
+        if (is_string($hostname) && IPHelpers::isForbiddenDomain($hostname)) {
             throw new \Kiwicom\Loopbind\Exceptions\InvalidHostnameException("Hostname `{$hostname}` is forbidden by this tool.");
         }
 
